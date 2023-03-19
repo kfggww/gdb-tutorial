@@ -1,2 +1,2 @@
 # gdb-tutorial
-Let me show you how to use gdb
+Using gdb more efficiently
