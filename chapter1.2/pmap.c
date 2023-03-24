@@ -30,11 +30,22 @@ int main(int argc, char const *argv[]) {
 
 void print_maps(pid_t pid) {
     char mapsfile[256];
+    char cmdfile[256];
     sprintf(mapsfile, "/proc/%d/maps", pid);
+    sprintf(cmdfile, "/proc/%d/cmdline", pid);
 
     FILE *fp = fopen(mapsfile, "r");
     die_if(fp == NULL, "fopen fail\n");
 
+    /*print cmdline*/
+    FILE *fp1 = fopen(cmdfile, "r");
+    die_if(fp1 == NULL, "fopen fail\n");
+    char cmdline[256];
+    fgets(cmdline, 255, fp1);
+    printf("%d:\t%s\n", pid, cmdline);
+    fclose(fp1);
+
+    /*print maps*/
     char buf[1024];
 
     long begin, end;
@@ -45,7 +56,7 @@ void print_maps(pid_t pid) {
     char pathname[256];
 
     while (!feof(fp)) {
-        if (fgets(buf, 1024, fp) != buf)
+        if (fgets(buf, 1023, fp) != buf)
             break;
 
         sscanf(buf, "%lx-%lx %s %lx %s %d %s", &begin, &end, perm, &offset, dev,
