@@ -1,11 +1,14 @@
 SHELL := $(shell which bash)
 CFLAGS := -g
 
-executables := pmap
+executables := test-list test-pmap
 
 all: $(executables)
 
-pmap: pmap.c
+test-list: test-list.c list.c
+	$(CC) $(CFLAGS) $^ -o $@
+
+test-pmap: test-pmap.c
 	$(CC) $(CFLAGS) $< -o $@
 
 clean:
